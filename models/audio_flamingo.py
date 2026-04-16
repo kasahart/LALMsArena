@@ -37,10 +37,10 @@ class AudioFlamingoModel(AudioModel):
         self._device = device
 
         dtype = torch.bfloat16 if device == "cuda" else torch.float32
-        self._processor = AutoProcessor.from_pretrained(_MODEL_ID, trust_remote_code=True)
+        _processor = AutoProcessor.from_pretrained(_MODEL_ID, trust_remote_code=True)
 
         try:
-            self._model = AutoModel.from_pretrained(
+            _model = AutoModel.from_pretrained(
                 _MODEL_ID,
                 dtype=dtype,
                 device_map="auto" if device == "cuda" else None,
@@ -55,9 +55,11 @@ class AudioFlamingoModel(AudioModel):
             raise
 
         if device != "cuda":
-            self._model = self._model.to(device)
+            _model = _model.to(device)
 
-        self._model.eval()
+        _model.eval()
+        self._processor = _processor
+        self._model = _model
 
     def run_inference(
         self,
@@ -70,6 +72,9 @@ class AudioFlamingoModel(AudioModel):
                 f"Unsupported audio format: {audio_path.suffix}. "
                 f"Supported: {', '.join(sorted(_SUPPORTED_EXTENSIONS))}"
             )
+
+        if self._model is None or self._processor is None:
+            raise RuntimeError("Model is not loaded. Call load() before run_inference().")
 
         conversation = [
             [
@@ -88,7 +93,7 @@ class AudioFlamingoModel(AudioModel):
             tokenize=True,
             add_generation_prompt=True,
             return_dict=True,
-        ).to(self._model.device)
+        ).to(self._device)
 
         if "input_features" in batch:
             batch["input_features"] = batch["input_features"].to(self._model.dtype)
