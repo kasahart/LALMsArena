@@ -5,14 +5,13 @@ import tempfile
 from pathlib import Path
 
 import matplotlib
+matplotlib.use("Agg")  # must be called before pyplot import
 import matplotlib.pyplot as plt
 import soundfile as sf
 import streamlit as st
 import wandas
 
 from models import get_model, list_models
-
-matplotlib.use("Agg")
 
 st.set_page_config(
     page_title="AudioLLMArena",
@@ -125,6 +124,7 @@ if run and uploaded is not None and selected_models:
     suffix = Path(uploaded.name).suffix.lower()
     uploaded.seek(0)
 
+    tmp_path = None
     with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as tmp:
         tmp.write(uploaded.read())
         tmp_path = Path(tmp.name)
@@ -153,4 +153,5 @@ if run and uploaded is not None and selected_models:
                 except (ValueError, RuntimeError) as exc:
                     st.error(f"エラー: {exc}")
     finally:
-        tmp_path.unlink(missing_ok=True)
+        if tmp_path is not None:
+            tmp_path.unlink(missing_ok=True)
