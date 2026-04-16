@@ -30,6 +30,11 @@ Repository = "https://github.com/kasahart/AudioLLMArena"
 Issues = "https://github.com/kasahart/AudioLLMArena/issues"
 License = "https://github.com/kasahart/AudioLLMArena/blob/main/LICENSE"
 
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+]
+
 [tool.uv]
 package = false
 
