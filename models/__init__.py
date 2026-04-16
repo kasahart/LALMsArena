@@ -2,9 +2,11 @@ from __future__ import annotations
 
 from models.base import AudioModel, InferenceResult
 from models.audio_flamingo import AudioFlamingoModel
+from models.gemma4_e4b import Gemma4E4BModel
 
 REGISTRY: dict[str, type[AudioModel]] = {
     "Audio Flamingo": AudioFlamingoModel,
+    "Gemma-4-E4B": Gemma4E4BModel,
 }
 
 
