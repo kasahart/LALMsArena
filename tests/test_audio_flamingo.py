@@ -121,3 +121,16 @@ def test_run_inference_returns_inference_result(tmp_path):
     assert result.answer == "This is the answer"
     assert result.model_id == "nvidia/audio-flamingo-next-hf"
     assert result.latency_ms >= 0
+
+
+@pytest.mark.gpu
+def test_inference_end_to_end(sample_wav: Path) -> None:
+    """Full load + run_inference with a real model on GPU."""
+    m = AudioFlamingoModel(device="cuda")
+    m.load()
+    result = m.run_inference(sample_wav, "What sound do you hear?")
+    assert isinstance(result, InferenceResult)
+    assert isinstance(result.answer, str)
+    assert len(result.answer) > 0
+    assert result.latency_ms > 0
+    assert result.model_id == "nvidia/audio-flamingo-next-hf"

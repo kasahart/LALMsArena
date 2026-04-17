@@ -162,3 +162,16 @@ def test_run_inference_loads_audio_with_librosa(tmp_path):
     assert "audios" in call_kwargs.kwargs or (
         call_kwargs.args and len(call_kwargs.args) > 1
     )
+
+
+@pytest.mark.gpu
+def test_inference_end_to_end(sample_wav: Path) -> None:
+    """Full load + run_inference with a real model on GPU."""
+    m = Qwen2AudioModel(device="cuda")
+    m.load()
+    result = m.run_inference(sample_wav, "What sound do you hear?")
+    assert isinstance(result, InferenceResult)
+    assert isinstance(result.answer, str)
+    assert len(result.answer) > 0
+    assert result.latency_ms > 0
+    assert result.model_id == "Qwen/Qwen2-Audio-7B-Instruct"
