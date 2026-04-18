@@ -1,0 +1,24 @@
+x-gpu: &gpu
+  runtime: nvidia
+  environment:
+    DEVICE: cuda
+    CUDA_VISIBLE_DEVICES: "0"
+
+services:
+  qwen2-audio:
+    <<: *gpu
+
+  audio-flamingo:
+    <<: *gpu
+
+  gemma4-e4b:
+    <<: *gpu
+
+  moss-4b:
+    <<: *gpu
+
+  moss-8b:
+    <<: *gpu
+
+  salmonn-13b:
+    <<: *gpu

@@ -1,0 +1,108 @@
+x-healthcheck: &healthcheck
+  test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 120s
+
+x-env-base: &env-base
+  PYTHONPATH: /workspace
+  DEVICE: cpu
+  HF_HOME: /root/.cache/huggingface
+  HF_HUB_CACHE: /root/.cache/huggingface/hub
+  TRANSFORMERS_CACHE: /root/.cache/huggingface/transformers
+
+services:
+  qwen2-audio:
+    build:
+      context: .
+      dockerfile: containers/qwen2_audio/Dockerfile
+    container_name: arena-qwen2-audio
+    restart: "no"
+    volumes:
+      - .:/workspace
+      - /workspace/.cache/huggingface:/root/.cache/huggingface
+    environment:
+      <<: *env-base
+      MODEL_NAME: "Qwen2-Audio"
+    ports: ["8600:8000"]
+    healthcheck: *healthcheck
+
+  audio-flamingo:
+    build:
+      context: .
+      dockerfile: containers/audio_flamingo/Dockerfile
+    container_name: arena-audio-flamingo
+    restart: "no"
+    volumes:
+      - .:/workspace
+      - /workspace/.cache/huggingface:/root/.cache/huggingface
+    environment:
+      <<: *env-base
+      MODEL_NAME: "Audio Flamingo"
+    ports: ["8601:8000"]
+    healthcheck: *healthcheck
+
+  gemma4-e4b:
+    build:
+      context: .
+      dockerfile: containers/gemma4_e4b/Dockerfile
+    container_name: arena-gemma4-e4b
+    restart: "no"
+    volumes:
+      - .:/workspace
+      - /workspace/.cache/huggingface:/root/.cache/huggingface
+    environment:
+      <<: *env-base
+      MODEL_NAME: "Gemma-4-E4B"
+    ports: ["8602:8000"]
+    healthcheck: *healthcheck
+
+  moss-4b:
+    build:
+      context: .
+      dockerfile: containers/moss_audio/Dockerfile
+    container_name: arena-moss-4b
+    restart: "no"
+    volumes:
+      - .:/workspace
+      - /workspace/.cache/huggingface:/root/.cache/huggingface
+    environment:
+      <<: *env-base
+      MODEL_NAME: "MOSS-Audio-4B"
+    ports: ["8603:8000"]
+    healthcheck: *healthcheck
+
+  moss-8b:
+    build:
+      context: .
+      dockerfile: containers/moss_audio/Dockerfile
+    container_name: arena-moss-8b
+    restart: "no"
+    volumes:
+      - .:/workspace
+      - /workspace/.cache/huggingface:/root/.cache/huggingface
+    environment:
+      <<: *env-base
+      MODEL_NAME: "MOSS-Audio-8B"
+    ports: ["8604:8000"]
+    healthcheck: *healthcheck
+
+  salmonn-13b:
+    build:
+      context: .
+      dockerfile: containers/salmonn_13b/Dockerfile
+    profiles: [salmonn]
+    container_name: arena-salmonn-13b
+    restart: "no"
+    volumes:
+      - .:/workspace
+      - /workspace/.cache/huggingface:/root/.cache/huggingface
+    environment:
+      <<: *env-base
+      MODEL_NAME: "SALMONN-13B"
+      SALMONN_BEATS_PATH: "${SALMONN_BEATS_PATH}"
+    ports: ["8605:8000"]
+    healthcheck:
+      <<: *healthcheck
+      start_period: 180s
