@@ -207,3 +207,9 @@ marimo/_lsp/
 __marimo__/
 
 docs/superpowers
+
+# External repos cloned for local use
+vendor/
+
+# Per-model venvs (pre-built on host, bind-mounted into containers)
+containers/*/.venv
