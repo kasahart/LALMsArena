@@ -1,0 +1,69 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start: All Inference Containers (GPU)",
+      "type": "shell",
+      "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d qwen2-audio audio-flamingo gemma4-e4b moss-4b moss-8b",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start: qwen2-audio (GPU)",
+      "type": "shell",
+      "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d qwen2-audio",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start: audio-flamingo (GPU)",
+      "type": "shell",
+      "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d audio-flamingo",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start: gemma4-e4b (GPU)",
+      "type": "shell",
+      "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d gemma4-e4b",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start: moss-4b (GPU)",
+      "type": "shell",
+      "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d moss-4b",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start: moss-8b (GPU)",
+      "type": "shell",
+      "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d moss-8b",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start: salmonn-13b (GPU, requires SALMONN_BEATS_PATH)",
+      "type": "shell",
+      "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml --profile salmonn up -d salmonn-13b",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Stop: All Inference Containers",
+      "type": "shell",
+      "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml down",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    }
+  ]
+}

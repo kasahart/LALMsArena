@@ -21,11 +21,24 @@ RUN apt-get update && apt-get install -y \
     git-lfs \
     curl \
     wget \
+    gnupg \
+    ca-certificates \
     ffmpeg \
     libsndfile1 \
     libsox-fmt-all \
     sox \
     build-essential \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install NVIDIA Container Toolkit so the DinD daemon can register the nvidia runtime.
+RUN curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey \
+    | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+    && curl -fsSL https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list \
+    | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#' \
+    > /etc/apt/sources.list.d/nvidia-container-toolkit.list \
+    && apt-get update \
+    && apt-get install -y nvidia-container-toolkit \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -39,6 +52,13 @@ RUN groupadd --gid ${USER_GID} ${USERNAME} \
     && usermod -aG sudo,audio,video ${USERNAME} \
     && echo "${USERNAME} ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/${USERNAME} \
     && chmod 0440 /etc/sudoers.d/${USERNAME}
+
+# Install Node.js (LTS) and Claude Code CLI
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
+    && apt-get install -y nodejs \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && npm install -g @anthropic-ai/claude-code
 
 # Upgrade pip and install uv
 RUN python3 -m pip install --upgrade pip setuptools wheel uv

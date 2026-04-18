@@ -35,15 +35,13 @@ cd AudioLLMArena
 uv sync --frozen
 ```
 
-> **注意**: GPU（NVIDIA A100 以上推奨）および CUDA 12.8 が必要です。PyTorch は CUDA 12.8 用ビルドを自動で取得します。
-
 ## 🏃‍♂️ Quick Start
 
 AudioLLMArena は **各モデルを独立した Docker コンテナ**で動かし、Streamlit UI からコンテナの推論 API を呼び出す構成です。
 
 ### 1. 推論コンテナの起動
 
-**GPU 環境（本番）:**
+**GPU 環境:**
 
 ```bash
 # 全モデルを起動
@@ -53,7 +51,7 @@ docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d
 docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d qwen2-audio audio-flamingo
 ```
 
-**GPU なし環境（開発・動作確認）:**
+**GPU なし環境:**
 
 ```bash
 docker compose up -d qwen2-audio
