@@ -103,6 +103,7 @@ class Qwen2AudioModel(AudioModel):
                 **inputs,
                 max_new_tokens=max_new_tokens,
                 do_sample=False,
+                pad_token_id=self._processor.tokenizer.eos_token_id,
             )
         latency_ms = (time.perf_counter() - t0) * 1000
 

@@ -99,7 +99,7 @@ class Gemma4E4BModel(AudioModel):
             generated_ids[0][input_len:],
             skip_special_tokens=True,
         )
-
+    
         return InferenceResult(
             answer=answer,
             latency_ms=latency_ms,

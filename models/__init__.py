@@ -1,26 +1,30 @@
 from __future__ import annotations
 
 from models.base import AudioModel, InferenceResult
-from models.audio_flamingo import AudioFlamingoModel
-from models.gemma4_e4b import Gemma4E4BModel
-from models.qwen2_audio import Qwen2AudioModel
 
-REGISTRY: dict[str, type[AudioModel]] = {
-    "Audio Flamingo": AudioFlamingoModel,
-    "Gemma-4-E4B": Gemma4E4BModel,
-    "Qwen2-Audio": Qwen2AudioModel,
+_REGISTRY: dict[str, str] = {
+    "Audio Flamingo": "models.audio_flamingo.AudioFlamingoModel",
+    "Gemma-4-E4B":    "models.gemma4_e4b.Gemma4E4BModel",
+    "MOSS-Audio-4B":  "models.moss_audio.MossAudio4BModel",
+    "MOSS-Audio-8B":  "models.moss_audio.MossAudio8BModel",
+    "Qwen2-Audio":    "models.qwen2_audio.Qwen2AudioModel",
+    "SALMONN-13B":    "models.salmonn_13b.SALMONNModel",
 }
 
 
 def list_models() -> list[str]:
-    return list(REGISTRY.keys())
+    return list(_REGISTRY.keys())
 
 
 def get_model(name: str, device: str = "cuda") -> AudioModel:
-    if name not in REGISTRY:
-        available = ", ".join(REGISTRY.keys())
+    if name not in _REGISTRY:
+        available = ", ".join(_REGISTRY.keys())
         raise KeyError(f"Model '{name}' not found. Available: {available}")
-    return REGISTRY[name](device=device)
+
+    module_path, class_name = _REGISTRY[name].rsplit(".", 1)
+    import importlib
+    cls = getattr(importlib.import_module(module_path), class_name)
+    return cls(device=device)
 
 
-__all__ = ["AudioModel", "InferenceResult", "REGISTRY", "list_models", "get_model"]
+__all__ = ["AudioModel", "InferenceResult", "list_models", "get_model"]
