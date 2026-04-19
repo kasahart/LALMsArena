@@ -32,6 +32,21 @@ MODEL_ENDPOINTS: dict[str, str] = {
     "MOSS-Audio-8B":         f"{_DEFAULT_BASE}:8604",
     "SALMONN-13B":           f"{_DEFAULT_BASE}:8605",
     "MOSS-Audio-8B-Thinking": f"{_DEFAULT_BASE}:8606",
+    "Step-Audio-R1.1":        f"{_DEFAULT_BASE}:8609",
+}
+
+
+MODEL_VRAM_GB: dict[str, int] = {
+    "Qwen2-Audio":                    14,
+    "Audio Flamingo Next":            14,
+    "Audio Flamingo Next Captioner":  14,
+    "Audio Flamingo Next Think":      14,
+    "Gemma-4-E4B":                     8,
+    "MOSS-Audio-4B":                   8,
+    "MOSS-Audio-8B":                  16,
+    "MOSS-Audio-8B-Thinking":         16,
+    "SALMONN-13B":                    26,
+    "Step-Audio-R1.1":                67,
 }
 
 
@@ -45,6 +60,7 @@ MODEL_HF_URLS: dict[str, str] = {
     "MOSS-Audio-8B":                 f"{_HF}/OpenMOSS-Team/MOSS-Audio-8B-Instruct",
     "MOSS-Audio-8B-Thinking":        f"{_HF}/OpenMOSS-Team/MOSS-Audio-8B-Thinking",
     "SALMONN-13B":                   f"{_HF}/tsinghua-ee/SALMONN",
+    "Step-Audio-R1.1":               f"{_HF}/stepfun-ai/Step-Audio-R1.1",
 }
 
 
@@ -109,8 +125,10 @@ with st.sidebar:
     for model_name, url in MODEL_ENDPOINTS.items():
         ok = _check_health(url)
         hf_url = MODEL_HF_URLS.get(model_name)
+        vram = MODEL_VRAM_GB.get(model_name)
         name_md = f"[{model_name}]({hf_url})" if hf_url else model_name
-        st.markdown(f"{'🟢' if ok else '🔴'} {name_md} `{url}`")
+        vram_md = f" `~{vram} GB`" if vram else ""
+        st.markdown(f"{'🟢' if ok else '🔴'} {name_md}{vram_md} `{url}`")
 
 # ---------------------------------------------------------------------------
 # Main
