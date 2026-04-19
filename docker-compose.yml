@@ -133,6 +133,51 @@ services:
     ports: ["8606:8000"]
     healthcheck: *healthcheck
 
+  step-audio-vllm:
+    image: stepfun2025/vllm:step-audio-2-v20250909
+    container_name: arena-step-audio-vllm
+    restart: "no"
+    volumes:
+      - /workspace/.cache/huggingface:/root/.cache/huggingface
+    environment:
+      HF_HOME: /root/.cache/huggingface
+      HF_HUB_CACHE: /root/.cache/huggingface/hub
+    command: >
+      python3 -m vllm.entrypoints.openai.api_server
+      --model stepfun-ai/Step-Audio-R1.1
+      --port 9999
+      --host 0.0.0.0
+      --trust-remote-code
+      --max-model-len 4096
+      --tensor-parallel-size 1
+      --gpu-memory-utilization 0.90
+
+  step-audio-r1:
+    build:
+      context: .
+      dockerfile: containers/step_audio_r1/Dockerfile
+    container_name: arena-step-audio-r1
+    restart: "no"
+    volumes:
+      - .:/workspace
+      - /workspace/.cache/huggingface:/root/.cache/huggingface
+    environment:
+      PYTHONPATH: /workspace
+      DEVICE: cpu
+      MODEL_NAME: "Step-Audio-R1.1"
+      STEP_AUDIO_VLLM_URL: "http://step-audio-vllm:9999"
+      HF_HOME: /root/.cache/huggingface
+      HF_HUB_CACHE: /root/.cache/huggingface/hub
+    ports: ["8609:8000"]
+    depends_on:
+      - step-audio-vllm
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 720s
+
   salmonn-13b:
     build:
       context: .

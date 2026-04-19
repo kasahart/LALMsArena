@@ -4,7 +4,7 @@
     {
       "label": "Start: All Inference Containers (GPU)",
       "type": "shell",
-      "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d qwen2-audio audio-flamingo audio-flamingo-captioner audio-flamingo-think gemma4-e4b moss-4b moss-8b moss-8b-thinking",
+      "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d qwen2-audio audio-flamingo audio-flamingo-captioner audio-flamingo-think gemma4-e4b moss-4b moss-8b moss-8b-thinking step-audio-vllm step-audio-r1",
       "group": "build",
       "presentation": { "reveal": "always", "panel": "shared" },
       "problemMatcher": []
@@ -77,6 +77,14 @@
       "label": "Start: salmonn-13b (GPU, requires SALMONN_BEATS_PATH)",
       "type": "shell",
       "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml --profile salmonn up -d salmonn-13b",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start: step-audio-r1 (GPU)",
+      "type": "shell",
+      "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d step-audio-vllm step-audio-r1",
       "group": "build",
       "presentation": { "reveal": "always", "panel": "shared" },
       "problemMatcher": []

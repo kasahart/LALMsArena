@@ -31,3 +31,6 @@ services:
 
   salmonn-13b:
     <<: *gpu
+
+  step-audio-vllm:
+    <<: *gpu
