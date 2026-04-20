@@ -206,7 +206,7 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-docs/superpowers
+docs/
 
 # External repos cloned for local use
 vendor/
