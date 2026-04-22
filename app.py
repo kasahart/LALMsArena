@@ -23,19 +23,19 @@ _DEFAULT_BASE = os.environ.get("ARENA_API_BASE", "http://localhost")
 _HF = "https://huggingface.co"
 
 MODEL_ENDPOINTS: dict[str, str] = {
-    "Qwen2-Audio":           f"{_DEFAULT_BASE}:8600",
-    "Audio Flamingo Next":      f"{_DEFAULT_BASE}:8601",
-    "Audio Flamingo Next Captioner": f"{_DEFAULT_BASE}:8607",
-    "Audio Flamingo Next Think":     f"{_DEFAULT_BASE}:8608",
-    "Gemma-4-E4B":           f"{_DEFAULT_BASE}:8602",
-    "MOSS-Audio-4B":         f"{_DEFAULT_BASE}:8603",
-    "MOSS-Audio-8B":         f"{_DEFAULT_BASE}:8604",
-    "SALMONN-13B":           f"{_DEFAULT_BASE}:8605",
-    "MOSS-Audio-8B-Thinking": f"{_DEFAULT_BASE}:8606",
-    "Step-Audio-R1.1":        f"{_DEFAULT_BASE}:8609",
-    "Qwen3-Omni":             f"{_DEFAULT_BASE}:8610",
-    "Qwen3-Omni-Captioner":   f"{_DEFAULT_BASE}:8611",
-    "Qwen3-Omni-Thinking":    f"{_DEFAULT_BASE}:8612",
+    "MOSS-Audio-4B":                  f"{_DEFAULT_BASE}:8603",  # ~11 GB
+    "Qwen2-Audio":                    f"{_DEFAULT_BASE}:8600",  # ~16 GB
+    "Gemma-4-E4B":                    f"{_DEFAULT_BASE}:8602",  # ~16 GB
+    "Audio Flamingo Next":            f"{_DEFAULT_BASE}:8601",  # ~16 GB
+    "Audio Flamingo Next Captioner":  f"{_DEFAULT_BASE}:8607",  # ~16 GB
+    "Audio Flamingo Next Think":      f"{_DEFAULT_BASE}:8608",  # ~16 GB
+    "MOSS-Audio-8B":                  f"{_DEFAULT_BASE}:8604",  # ~17 GB
+    "MOSS-Audio-8B-Thinking":         f"{_DEFAULT_BASE}:8606",  # ~17 GB
+    "SALMONN-13B":                    f"{_DEFAULT_BASE}:8605",  # ~26 GB
+    "Qwen3-Omni-Captioner":           f"{_DEFAULT_BASE}:8611",  # ~61 GB
+    "Qwen3-Omni-Thinking":            f"{_DEFAULT_BASE}:8612",  # ~61 GB
+    "Qwen3-Omni":                     f"{_DEFAULT_BASE}:8610",  # ~68 GB
+    "Step-Audio-R1.1":                f"{_DEFAULT_BASE}:8609",  # ~80 GB
 }
 
 
