@@ -8,11 +8,17 @@ RUN apt-get update && apt-get install -y \
 
 RUN pip install --upgrade pip uv
 
+COPY containers/nemotron_omni/pyproject.toml /opt/nemotron_omni/pyproject.toml
+COPY containers/nemotron_omni/uv.lock        /opt/nemotron_omni/uv.lock
+
+ENV VIRTUAL_ENV=/opt/nemotron_omni/.venv \
+    PATH="/opt/nemotron_omni/.venv/bin:$PATH"
+
+RUN cd /opt/nemotron_omni && uv sync --frozen --no-dev
+
 WORKDIR /workspace
 
-ENV VIRTUAL_ENV=/workspace/containers/nemotron_omni/.venv \
-    PATH="/workspace/containers/nemotron_omni/.venv/bin:$PATH" \
-    PYTHONPATH=/workspace \
+ENV PYTHONPATH=/workspace \
     HF_HOME=/root/.cache/huggingface \
     HF_HUB_CACHE=/root/.cache/huggingface/hub
 
