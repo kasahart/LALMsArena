@@ -17,11 +17,12 @@ RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1
 # Install Python dependencies at build time into /opt/venv (outside the
 # /workspace volume mount so the host directory does not shadow the venv).
 COPY containers/mimo_audio/pyproject.toml /opt/mimo_audio/pyproject.toml
+COPY containers/mimo_audio/uv.lock        /opt/mimo_audio/uv.lock
 
 ENV VIRTUAL_ENV=/opt/mimo_audio/.venv \
     PATH="/opt/mimo_audio/.venv/bin:$PATH"
 
-RUN cd /opt/mimo_audio && uv sync --no-dev
+RUN cd /opt/mimo_audio && uv sync --frozen --no-dev
 
 WORKDIR /workspace
 

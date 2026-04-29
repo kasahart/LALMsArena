@@ -280,7 +280,8 @@ services:
       HF_HUB_CACHE: /root/.cache/huggingface/hub
     ports: ["8615:8000"]
     depends_on:
-      - nemotron-vllm
+      nemotron-vllm:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
