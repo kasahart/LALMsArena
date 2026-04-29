@@ -229,6 +229,65 @@ services:
       <<: *healthcheck
       start_period: 300s
 
+  nemotron-vllm:
+    build:
+      context: .
+      dockerfile: containers/nemotron_vllm/Dockerfile
+    container_name: arena-nemotron-vllm
+    restart: "no"
+    volumes:
+      - /mnt/kioxia_g2/model_cache/huggingface:/root/.cache/huggingface
+    environment:
+      HF_HOME: /root/.cache/huggingface
+      HF_HUB_CACHE: /root/.cache/huggingface/hub
+    entrypoint: ["python3", "-m", "vllm.entrypoints.openai.api_server"]
+    command:
+      - --model
+      - nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16
+      - --port
+      - "9999"
+      - --host
+      - "0.0.0.0"
+      - --trust-remote-code
+      - --max-model-len
+      - "16384"
+      - --tensor-parallel-size
+      - "1"
+      - --gpu-memory-utilization
+      - "0.90"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9999/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 300s
+
+  nemotron-omni-reasoning:
+    build:
+      context: .
+      dockerfile: containers/nemotron_omni/Dockerfile
+    container_name: arena-nemotron-omni-reasoning
+    restart: "no"
+    volumes:
+      - .:/workspace
+      - /mnt/kioxia_g2/model_cache/huggingface:/root/.cache/huggingface
+    environment:
+      PYTHONPATH: /workspace
+      DEVICE: cpu
+      MODEL_NAME: "Nemotron-Nano-Omni-Reasoning"
+      NEMOTRON_VLLM_URL: "http://nemotron-vllm:9999"
+      HF_HOME: /root/.cache/huggingface
+      HF_HUB_CACHE: /root/.cache/huggingface/hub
+    ports: ["8615:8000"]
+    depends_on:
+      - nemotron-vllm
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 720s
+
   mimo-audio:
     build:
       context: .

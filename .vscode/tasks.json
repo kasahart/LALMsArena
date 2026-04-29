@@ -4,7 +4,7 @@
     {
       "label": "Start: All Inference Containers (GPU)",
       "type": "shell",
-      "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d qwen2-audio audio-flamingo audio-flamingo-captioner audio-flamingo-think gemma4-e4b moss-4b moss-8b moss-8b-thinking mimo-audio mimo-audio-thinking step-audio-vllm step-audio-r1",
+      "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d qwen2-audio audio-flamingo audio-flamingo-captioner audio-flamingo-think gemma4-e4b moss-4b moss-8b moss-8b-thinking mimo-audio mimo-audio-thinking step-audio-vllm step-audio-r1 nemotron-vllm nemotron-omni-reasoning",
       "group": "build",
       "presentation": { "reveal": "always", "panel": "shared" },
       "problemMatcher": []
@@ -125,6 +125,22 @@
       "label": "Start: qwen3-omni-thinking (GPU)",
       "type": "shell",
       "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d qwen3-omni-thinking",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start: nemotron-omni-reasoning (GPU)",
+      "type": "shell",
+      "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d nemotron-vllm nemotron-omni-reasoning",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Setup: Container venvs (uv sync)",
+      "type": "shell",
+      "command": "for d in audio_flamingo gemma4_e4b moss_audio qwen2_audio qwen3_omni salmonn_13b step_audio_r1 nemotron_omni; do echo \"=== $d ===\"; UV_PROJECT_ENVIRONMENT=/workspace/containers/$d/.venv uv sync --frozen --project containers/$d --python python3.11; done",
       "group": "build",
       "presentation": { "reveal": "always", "panel": "shared" },
       "problemMatcher": []

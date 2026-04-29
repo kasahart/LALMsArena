@@ -36,6 +36,7 @@ MODEL_ENDPOINTS: dict[str, str] = {
     "SALMONN-13B":                    f"{_DEFAULT_BASE}:8605",  # ~26 GB
     "Qwen3-Omni-Captioner":           f"{_DEFAULT_BASE}:8611",  # ~61 GB
     "Qwen3-Omni-Thinking":            f"{_DEFAULT_BASE}:8612",  # ~61 GB
+    "Nemotron-Nano-Omni-Reasoning":   f"{_DEFAULT_BASE}:8615",  # ~61 GB
     "Qwen3-Omni":                     f"{_DEFAULT_BASE}:8610",  # ~68 GB
     "Step-Audio-R1.1":                f"{_DEFAULT_BASE}:8609",  # ~80 GB
 }
@@ -57,6 +58,7 @@ MODEL_VRAM_GB: dict[str, int] = {
     "Qwen3-Omni":                     68,
     "Qwen3-Omni-Captioner":           61,
     "Qwen3-Omni-Thinking":            61,
+    "Nemotron-Nano-Omni-Reasoning":   61,
 }
 
 
@@ -76,6 +78,7 @@ MODEL_HF_URLS: dict[str, str] = {
     "Qwen3-Omni":                    f"{_HF}/Qwen/Qwen3-Omni-30B-A3B-Instruct",
     "Qwen3-Omni-Captioner":          f"{_HF}/Qwen/Qwen3-Omni-30B-A3B-Captioner",
     "Qwen3-Omni-Thinking":           f"{_HF}/Qwen/Qwen3-Omni-30B-A3B-Thinking",
+    "Nemotron-Nano-Omni-Reasoning":  f"{_HF}/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16",
 }
 
 

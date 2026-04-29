@@ -44,6 +44,12 @@ services:
   qwen3-omni-captioner:
     <<: *gpu
 
+  nemotron-vllm:
+    <<: *gpu
+
+  nemotron-omni-reasoning:
+    <<: *gpu
+
   mimo-audio:
     <<: *gpu
 
