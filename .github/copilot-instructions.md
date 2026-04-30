@@ -154,15 +154,6 @@ docker compose -f docker-compose.yml -f docker-compose.gpu.yml build <service>
 
 ---
 
-## GPU 環境
-
-- **GPU 0**：NVIDIA RTX PRO 6000 Blackwell Max-Q（約 98 GB VRAM）
-- **GPU 1**：NVIDIA T400 4GB
-- 全コンテナはデフォルトで `CUDA_VISIBLE_DEVICES=0`（大型 GPU）を使用
-- 複数コンテナを同時起動すると VRAM が不足するため、テスト時は 1 コンテナずつ起動・停止する
-
----
-
 ## よくある問題
 
 | 症状 | 原因 | 対処 |
