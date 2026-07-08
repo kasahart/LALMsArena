@@ -108,9 +108,9 @@ echo "=========================================="
 baseline=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits -i 0 | tr -d ' ')
 echo "Baseline GPU0: ${baseline} MiB"
 docker compose -f /workspace/docker-compose.yml -f /workspace/docker-compose.gpu.yml up -d audex-vllm audex-30b-a3b
-echo "Waiting for audex-30b-a3b healthy (max 800s)..."
+echo "Waiting for audex-30b-a3b healthy (max 1200s)..."
 elapsed=0; status=""
-while [ $elapsed -lt 800 ]; do
+while [ $elapsed -lt 1200 ]; do
     status=$(docker inspect --format='{{.State.Health.Status}}' arena-audex-30b-a3b 2>/dev/null || echo "unknown")
     if [ "$status" = "healthy" ]; then echo "Healthy after ${elapsed}s"; break; fi
     sleep 10; elapsed=$((elapsed+10)); printf "."
