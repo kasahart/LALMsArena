@@ -4,26 +4,26 @@ import pytest
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from models.gemma4_e4b import Gemma4E4BModel
+from models.gemma4_12b import Gemma412BModel
 from models.base import InferenceResult
 
 
 def test_display_name():
-    m = Gemma4E4BModel()
-    assert m.display_name == "Gemma-4-E4B"
+    m = Gemma412BModel()
+    assert m.display_name == "Gemma-4-12B"
 
 
 def test_model_id():
-    m = Gemma4E4BModel()
-    assert m.model_id == "google/gemma-4-E4B-it"
+    m = Gemma412BModel()
+    assert m.model_id == "google/gemma-4-12B-it"
 
 
 def test_load_is_idempotent():
-    m = Gemma4E4BModel(device="cpu")
+    m = Gemma412BModel(device="cpu")
 
-    with patch("models.gemma4_e4b.AutoModelForMultimodalLM") as MockModel, \
-         patch("models.gemma4_e4b.AutoProcessor") as MockProcessor, \
-         patch("models.gemma4_e4b.torch") as mock_torch:
+    with patch("models.gemma4_12b.AutoModelForMultimodalLM") as MockModel, \
+         patch("models.gemma4_12b.AutoProcessor") as MockProcessor, \
+         patch("models.gemma4_12b.torch") as mock_torch:
 
         mock_torch.cuda.is_available.return_value = False
         mock_torch.float32 = "float32"
@@ -37,11 +37,11 @@ def test_load_is_idempotent():
 
 
 def test_load_falls_back_to_cpu_when_cuda_unavailable():
-    m = Gemma4E4BModel(device="cuda")
+    m = Gemma412BModel(device="cuda")
 
-    with patch("models.gemma4_e4b.AutoModelForMultimodalLM") as MockModel, \
-         patch("models.gemma4_e4b.AutoProcessor") as MockProcessor, \
-         patch("models.gemma4_e4b.torch") as mock_torch:
+    with patch("models.gemma4_12b.AutoModelForMultimodalLM") as MockModel, \
+         patch("models.gemma4_12b.AutoProcessor") as MockProcessor, \
+         patch("models.gemma4_12b.torch") as mock_torch:
 
         mock_torch.cuda.is_available.return_value = False
         mock_torch.float32 = "float32"
@@ -57,7 +57,7 @@ def test_run_inference_raises_on_unsupported_extension(tmp_path):
     audio_file = tmp_path / "audio.xyz"
     audio_file.write_bytes(b"fake")
 
-    m = Gemma4E4BModel()
+    m = Gemma412BModel()
     m._model = MagicMock()
     m._processor = MagicMock()
     m._device = "cpu"
@@ -70,7 +70,7 @@ def test_run_inference_raises_if_not_loaded(tmp_path):
     audio_file = tmp_path / "audio.wav"
     audio_file.write_bytes(b"fake")
 
-    m = Gemma4E4BModel()
+    m = Gemma412BModel()
 
     with pytest.raises(RuntimeError, match="not loaded"):
         m.run_inference(audio_file, "What do you hear?")
@@ -98,12 +98,12 @@ def test_run_inference_returns_inference_result(tmp_path):
     mock_processor.apply_chat_template.return_value = mock_apply_result
     mock_processor.decode.return_value = "This is the answer"
 
-    m = Gemma4E4BModel()
+    m = Gemma412BModel()
     m._model = mock_model
     m._processor = mock_processor
     m._device = "cpu"
 
-    with patch("models.gemma4_e4b.torch") as mock_torch:
+    with patch("models.gemma4_12b.torch") as mock_torch:
         mock_ctx = MagicMock()
         mock_ctx.__enter__ = MagicMock(return_value=None)
         mock_ctx.__exit__ = MagicMock(return_value=False)
@@ -113,7 +113,7 @@ def test_run_inference_returns_inference_result(tmp_path):
 
     assert isinstance(result, InferenceResult)
     assert result.answer == "This is the answer"
-    assert result.model_id == "google/gemma-4-E4B-it"
+    assert result.model_id == "google/gemma-4-12B-it"
     assert result.latency_ms >= 0
     mock_processor.apply_chat_template.assert_called_once_with(
         [
@@ -156,13 +156,13 @@ def test_run_inference_places_text_before_audio(tmp_path):
     mock_processor.apply_chat_template.return_value = mock_apply_result
     mock_processor.decode.return_value = "answer"
 
-    m = Gemma4E4BModel()
+    m = Gemma412BModel()
     m._model = MagicMock()
     m._model.generate.return_value = MagicMock()
     m._processor = mock_processor
     m._device = "cpu"
 
-    with patch("models.gemma4_e4b.torch") as mock_torch:
+    with patch("models.gemma4_12b.torch") as mock_torch:
         mock_ctx = MagicMock()
         mock_ctx.__enter__ = MagicMock(return_value=None)
         mock_ctx.__exit__ = MagicMock(return_value=False)
@@ -182,11 +182,11 @@ def test_run_inference_places_text_before_audio(tmp_path):
 @pytest.mark.gpu
 def test_inference_end_to_end(sample_wav: Path) -> None:
     """Full load + run_inference with a real model on GPU."""
-    m = Gemma4E4BModel(device="cuda")
+    m = Gemma412BModel(device="cuda")
     m.load()
     result = m.run_inference(sample_wav, "What sound do you hear?")
     assert isinstance(result, InferenceResult)
     assert isinstance(result.answer, str)
     assert len(result.answer) > 0
     assert result.latency_ms > 0
-    assert result.model_id == "google/gemma-4-E4B-it"
+    assert result.model_id == "google/gemma-4-12B-it"

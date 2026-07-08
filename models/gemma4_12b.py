@@ -8,14 +8,14 @@ from transformers import AutoModelForMultimodalLM, AutoProcessor
 
 from models.base import AudioModel, InferenceResult
 
-_MODEL_ID = "google/gemma-4-E4B-it"
+_MODEL_ID = "google/gemma-4-12B-it"
 _SUPPORTED_EXTENSIONS = {".wav", ".mp3", ".flac", ".m4a", ".ogg"}
 _TEMPERATURE = 1.0
 _TOP_P = 0.95
 _TOP_K = 64
 
 
-class Gemma4E4BModel(AudioModel):
+class Gemma412BModel(AudioModel):
     def __init__(self, device: str = "cuda") -> None:
         self._requested_device = device
         self._device: str | None = None
@@ -24,7 +24,7 @@ class Gemma4E4BModel(AudioModel):
 
     @property
     def display_name(self) -> str:
-        return "Gemma-4-E4B"
+        return "Gemma-4-12B"
 
     @property
     def model_id(self) -> str:
@@ -44,6 +44,7 @@ class Gemma4E4BModel(AudioModel):
         _model = AutoModelForMultimodalLM.from_pretrained(
             _MODEL_ID,
             dtype=dtype,
+            attn_implementation="eager",
             device_map="auto" if device == "cuda" else None,
         )
 
@@ -107,8 +108,4 @@ class Gemma4E4BModel(AudioModel):
             skip_special_tokens=True,
         )
     
-        return InferenceResult(
-            answer=answer,
-            latency_ms=latency_ms,
-            model_id=_MODEL_ID,
-        )
+        return InferenceResult(answer=answer, latency_ms=latency_ms, model_id=_MODEL_ID)

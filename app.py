@@ -26,6 +26,7 @@ MODEL_ENDPOINTS: dict[str, str] = {
     "Audio-Omni":                     f"{_DEFAULT_BASE}:8616",  # ~24 GB
     "MOSS-Audio-4B":                  f"{_DEFAULT_BASE}:8603",  # ~11 GB
     "Qwen2-Audio":                    f"{_DEFAULT_BASE}:8600",  # ~16 GB
+    "Gemma-4-12B":                    f"{_DEFAULT_BASE}:8617",  # ~32 GB
     "Gemma-4-E4B":                    f"{_DEFAULT_BASE}:8602",  # ~16 GB
     "Audio Flamingo Next":            f"{_DEFAULT_BASE}:8601",  # ~16 GB
     "Audio Flamingo Next Captioner":  f"{_DEFAULT_BASE}:8607",  # ~16 GB
@@ -49,6 +50,7 @@ MODEL_VRAM_GB: dict[str, int] = {
     "Audio Flamingo Next":            16,
     "Audio Flamingo Next Captioner":  16,
     "Audio Flamingo Next Think":      16,
+    "Gemma-4-12B":                    32,
     "Gemma-4-E4B":                    16,
     "Audio-Omni":                     24,
     "MOSS-Audio-4B":                  11,
@@ -71,6 +73,7 @@ MODEL_HF_URLS: dict[str, str] = {
     "Audio Flamingo Next":           f"{_HF}/nvidia/audio-flamingo-next-hf",
     "Audio Flamingo Next Captioner": f"{_HF}/nvidia/audio-flamingo-next-captioner-hf",
     "Audio Flamingo Next Think":     f"{_HF}/nvidia/audio-flamingo-next-think-hf",
+    "Gemma-4-12B":                   f"{_HF}/google/gemma-4-12B",
     "Gemma-4-E4B":                   f"{_HF}/google/gemma-4-E4B-it",
     "MOSS-Audio-4B":                 f"{_HF}/OpenMOSS-Team/MOSS-Audio-4B-Instruct",
     "MOSS-Audio-8B":                 f"{_HF}/OpenMOSS-Team/MOSS-Audio-8B-Instruct",

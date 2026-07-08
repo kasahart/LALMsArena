@@ -7,6 +7,7 @@ _REGISTRY: dict[str, str] = {
     "Audio Flamingo Next":      "models.audio_flamingo.AudioFlamingoModel",
     "Audio Flamingo Next Captioner": "models.audio_flamingo.AudioFlamingoNextCaptionerModel",
     "Audio Flamingo Next Think":     "models.audio_flamingo.AudioFlamingoNextThinkModel",
+    "Gemma-4-12B":    "models.gemma4_12b.Gemma412BModel",
     "Gemma-4-E4B":    "models.gemma4_e4b.Gemma4E4BModel",
     "MiMo-Audio-7B":         "models.mimo_audio.MimoAudio7BModel",
     "MiMo-Audio-7B-Thinking": "models.mimo_audio.MimoAudio7BThinkingModel",

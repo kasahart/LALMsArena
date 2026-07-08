@@ -4,7 +4,7 @@
     {
       "label": "Start: All Inference Containers (GPU)",
       "type": "shell",
-      "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d qwen2-audio audio-flamingo audio-flamingo-captioner audio-flamingo-think gemma4-e4b moss-4b moss-8b moss-8b-thinking mimo-audio mimo-audio-thinking step-audio-vllm step-audio-r1 nemotron-vllm nemotron-omni-reasoning",
+      "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d qwen2-audio audio-flamingo audio-flamingo-captioner audio-flamingo-think gemma4-e4b gemma4-12b moss-4b moss-8b moss-8b-thinking mimo-audio mimo-audio-thinking step-audio-vllm step-audio-r1 nemotron-vllm nemotron-omni-reasoning",
       "group": "build",
       "presentation": {
         "reveal": "always",
@@ -60,6 +60,17 @@
       "label": "Start: gemma4-e4b (GPU)",
       "type": "shell",
       "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d gemma4-e4b",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start: gemma4-12b (GPU)",
+      "type": "shell",
+      "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d gemma4-12b",
       "group": "build",
       "presentation": {
         "reveal": "always",

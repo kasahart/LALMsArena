@@ -65,6 +65,7 @@ measure "MOSS-Audio-4B"                 "moss-4b"                  "arena-moss-4
 measure "MOSS-Audio-8B"                 "moss-8b"                  "arena-moss-8b"                  300
 measure "MOSS-Audio-8B-Thinking"        "moss-8b-thinking"         "arena-moss-8b-thinking"         300
 measure "Gemma-4-E4B"                   "gemma4-e4b"               "arena-gemma4-e4b"               300
+measure "Gemma-4-12B"                   "gemma4-12b"               "arena-gemma4-12b"               600
 measure "Qwen2-Audio"                   "qwen2-audio"              "arena-qwen2-audio"              300
 measure "Audio Flamingo Next"           "audio-flamingo"           "arena-audio-flamingo"           300
 measure "Audio Flamingo Next Captioner" "audio-flamingo-captioner" "arena-audio-flamingo-captioner" 300

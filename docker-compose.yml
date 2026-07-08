@@ -88,6 +88,21 @@ services:
     ports: ["8602:8000"]
     healthcheck: *healthcheck
 
+  gemma4-12b:
+    build:
+      context: .
+      dockerfile: containers/gemma4_12b/Dockerfile
+    container_name: arena-gemma4-12b
+    restart: "no"
+    volumes:
+      - .:/workspace
+      - /mnt/kioxia_g2/model_cache/huggingface:/root/.cache/huggingface
+    environment:
+      <<: *env-base
+      MODEL_NAME: "Gemma-4-12B"
+    ports: ["8617:8000"]
+    healthcheck: *healthcheck
+
   moss-4b:
     build:
       context: .

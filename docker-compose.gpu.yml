@@ -20,6 +20,9 @@ services:
   gemma4-e4b:
     <<: *gpu
 
+  gemma4-12b:
+    <<: *gpu
+
   moss-4b:
     <<: *gpu
 
