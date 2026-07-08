@@ -50,6 +50,12 @@ services:
   nemotron-omni-reasoning:
     <<: *gpu
 
+  audex-vllm:
+    <<: *gpu
+
+  audex-30b-a3b:
+    <<: *gpu
+
   mimo-audio:
     <<: *gpu
 

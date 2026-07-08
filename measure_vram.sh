@@ -102,6 +102,29 @@ measure "Qwen3-Omni-Thinking"  "qwen3-omni-thinking"  "arena-qwen3-omni-thinking
 
 echo ""
 echo "=========================================="
+echo "[Nemotron-Labs-Audex-30B-A3B] Starting vllm + proxy..."
+echo "=========================================="
+baseline=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits -i 0 | tr -d ' ')
+echo "Baseline GPU0: ${baseline} MiB"
+docker compose -f /workspace/docker-compose.yml -f /workspace/docker-compose.gpu.yml up -d audex-vllm audex-30b-a3b
+echo "Waiting for audex-30b-a3b healthy (max 1200s)..."
+elapsed=0; status=""
+while [ $elapsed -lt 1200 ]; do
+    status=$(docker inspect --format='{{.State.Health.Status}}' arena-audex-30b-a3b 2>/dev/null || echo "unknown")
+    if [ "$status" = "healthy" ]; then echo "Healthy after ${elapsed}s"; break; fi
+    sleep 10; elapsed=$((elapsed+10)); printf "."
+done
+echo ""
+used=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits -i 0 | tr -d ' ')
+vram=$((used - baseline))
+echo "VRAM [Nemotron-Labs-Audex-30B-A3B]: ${vram} MiB (~$(gb $vram) GB)"
+echo "RESULT:Nemotron-Labs-Audex-30B-A3B:${vram}" | tee -a "$LOG"
+docker compose -f /workspace/docker-compose.yml -f /workspace/docker-compose.gpu.yml stop audex-30b-a3b audex-vllm
+docker compose -f /workspace/docker-compose.yml -f /workspace/docker-compose.gpu.yml rm -f audex-30b-a3b audex-vllm
+sleep 30
+
+echo ""
+echo "=========================================="
 echo "ALL DONE. Results:"
 cat "$LOG"
 echo "=========================================="
