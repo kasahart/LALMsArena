@@ -115,10 +115,34 @@ def test_run_inference_returns_inference_result(tmp_path):
     assert result.answer == "This is the answer"
     assert result.model_id == "google/gemma-4-E4B-it"
     assert result.latency_ms >= 0
+    mock_processor.apply_chat_template.assert_called_once_with(
+        [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": "What do you hear?"},
+                    {"type": "audio", "audio": str(audio_file)},
+                ],
+            }
+        ],
+        tokenize=True,
+        return_dict=True,
+        return_tensors="pt",
+        add_generation_prompt=True,
+        enable_thinking=False,
+    )
+    mock_model.generate.assert_called_once_with(
+        **mock_inputs,
+        max_new_tokens=512,
+        do_sample=True,
+        temperature=1.0,
+        top_p=0.95,
+        top_k=64,
+    )
 
 
-def test_run_inference_uses_audio_key_not_path(tmp_path):
-    """音声入力は {"type": "audio", "audio": path} 形式（"path" キーではない）"""
+def test_run_inference_places_text_before_audio(tmp_path):
+    """Gemma 4 はテキストの後に音声を置く推奨順序を使う。"""
     audio_file = tmp_path / "audio.wav"
     audio_file.write_bytes(b"fake wav")
 
@@ -147,7 +171,9 @@ def test_run_inference_uses_audio_key_not_path(tmp_path):
 
     call_args = mock_processor.apply_chat_template.call_args
     messages = call_args[0][0]
-    audio_content = messages[0]["content"][0]
+    text_content = messages[0]["content"][0]
+    audio_content = messages[0]["content"][1]
+    assert text_content == {"type": "text", "text": "What?"}
     assert audio_content["type"] == "audio"
     assert "audio" in audio_content
     assert "path" not in audio_content

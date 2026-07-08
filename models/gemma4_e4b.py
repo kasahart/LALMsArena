@@ -10,6 +10,9 @@ from models.base import AudioModel, InferenceResult
 
 _MODEL_ID = "google/gemma-4-E4B-it"
 _SUPPORTED_EXTENSIONS = {".wav", ".mp3", ".flac", ".m4a", ".ogg"}
+_TEMPERATURE = 1.0
+_TOP_P = 0.95
+_TOP_K = 64
 
 
 class Gemma4E4BModel(AudioModel):
@@ -70,8 +73,8 @@ class Gemma4E4BModel(AudioModel):
             {
                 "role": "user",
                 "content": [
-                    {"type": "audio", "audio": str(audio_path)},
                     {"type": "text", "text": question},
+                    {"type": "audio", "audio": str(audio_path)},
                 ],
             }
         ]
@@ -82,6 +85,7 @@ class Gemma4E4BModel(AudioModel):
             return_dict=True,
             return_tensors="pt",
             add_generation_prompt=True,
+            enable_thinking=False,
         ).to(self._device)
 
         input_len = inputs["input_ids"].shape[-1]
@@ -91,7 +95,10 @@ class Gemma4E4BModel(AudioModel):
             generated_ids = self._model.generate(
                 **inputs,
                 max_new_tokens=max_new_tokens,
-                do_sample=False,
+                do_sample=True,
+                temperature=_TEMPERATURE,
+                top_p=_TOP_P,
+                top_k=_TOP_K,
             )
         latency_ms = (time.perf_counter() - t0) * 1000
 
