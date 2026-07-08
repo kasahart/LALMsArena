@@ -88,6 +88,21 @@ services:
     ports: ["8602:8000"]
     healthcheck: *healthcheck
 
+  gemma4-12b:
+    build:
+      context: .
+      dockerfile: containers/gemma4_12b/Dockerfile
+    container_name: arena-gemma4-12b
+    restart: "no"
+    volumes:
+      - .:/workspace
+      - /mnt/kioxia_g2/model_cache/huggingface:/root/.cache/huggingface
+    environment:
+      <<: *env-base
+      MODEL_NAME: "Gemma-4-12B"
+    ports: ["8617:8000"]
+    healthcheck: *healthcheck
+
   moss-4b:
     build:
       context: .
@@ -281,6 +296,58 @@ services:
     ports: ["8615:8000"]
     depends_on:
       nemotron-vllm:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 720s
+
+  audex-vllm:
+    build:
+      context: .
+      dockerfile: containers/audex_vllm/Dockerfile
+    container_name: arena-audex-vllm
+    restart: "no"
+    volumes:
+      - /mnt/kioxia_g2/model_cache/huggingface:/root/.cache/huggingface
+      - /mnt/kioxia_g2/model_cache/audex:/models/audex
+    environment:
+      HF_HOME: /root/.cache/huggingface
+      HF_HUB_CACHE: /root/.cache/huggingface/hub
+      HOST: "0.0.0.0"
+      TP: "1"
+      GMU: "0.90"
+      MAX_MODEL_LEN: "16384"
+      ALLOWED_MEDIA_PATH: ""
+    entrypoint: ["/bin/bash", "/opt/audex_vllm/start.sh"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9999/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 1800s
+
+  audex-30b-a3b:
+    build:
+      context: .
+      dockerfile: containers/nemotron_omni/Dockerfile
+    container_name: arena-audex-30b-a3b
+    restart: "no"
+    volumes:
+      - .:/workspace
+      - /mnt/kioxia_g2/model_cache/huggingface:/root/.cache/huggingface
+    environment:
+      PYTHONPATH: /workspace
+      DEVICE: cpu
+      MODEL_NAME: "Nemotron-Labs-Audex-30B-A3B"
+      AUDEX_VLLM_URL: "http://audex-vllm:9999"
+      HF_HOME: /root/.cache/huggingface
+      HF_HUB_CACHE: /root/.cache/huggingface/hub
+    ports: ["8618:8000"]
+    depends_on:
+      audex-vllm:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]

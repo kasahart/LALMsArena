@@ -65,6 +65,7 @@ measure "MOSS-Audio-4B"                 "moss-4b"                  "arena-moss-4
 measure "MOSS-Audio-8B"                 "moss-8b"                  "arena-moss-8b"                  300
 measure "MOSS-Audio-8B-Thinking"        "moss-8b-thinking"         "arena-moss-8b-thinking"         300
 measure "Gemma-4-E4B"                   "gemma4-e4b"               "arena-gemma4-e4b"               300
+measure "Gemma-4-12B"                   "gemma4-12b"               "arena-gemma4-12b"               600
 measure "Qwen2-Audio"                   "qwen2-audio"              "arena-qwen2-audio"              300
 measure "Audio Flamingo Next"           "audio-flamingo"           "arena-audio-flamingo"           300
 measure "Audio Flamingo Next Captioner" "audio-flamingo-captioner" "arena-audio-flamingo-captioner" 300
@@ -99,6 +100,29 @@ sleep 30
 measure "Qwen3-Omni"           "qwen3-omni"           "arena-qwen3-omni"           600
 measure "Qwen3-Omni-Captioner" "qwen3-omni-captioner" "arena-qwen3-omni-captioner" 600
 measure "Qwen3-Omni-Thinking"  "qwen3-omni-thinking"  "arena-qwen3-omni-thinking"  600
+
+echo ""
+echo "=========================================="
+echo "[Nemotron-Labs-Audex-30B-A3B] Starting vllm + proxy..."
+echo "=========================================="
+baseline=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits -i 0 | tr -d ' ')
+echo "Baseline GPU0: ${baseline} MiB"
+docker compose -f /workspace/docker-compose.yml -f /workspace/docker-compose.gpu.yml up -d audex-vllm audex-30b-a3b
+echo "Waiting for audex-30b-a3b healthy (max 800s)..."
+elapsed=0; status=""
+while [ $elapsed -lt 800 ]; do
+    status=$(docker inspect --format='{{.State.Health.Status}}' arena-audex-30b-a3b 2>/dev/null || echo "unknown")
+    if [ "$status" = "healthy" ]; then echo "Healthy after ${elapsed}s"; break; fi
+    sleep 10; elapsed=$((elapsed+10)); printf "."
+done
+echo ""
+used=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits -i 0 | tr -d ' ')
+vram=$((used - baseline))
+echo "VRAM [Nemotron-Labs-Audex-30B-A3B]: ${vram} MiB (~$(gb $vram) GB)"
+echo "RESULT:Nemotron-Labs-Audex-30B-A3B:${vram}" | tee -a "$LOG"
+docker compose -f /workspace/docker-compose.yml -f /workspace/docker-compose.gpu.yml stop audex-30b-a3b audex-vllm
+docker compose -f /workspace/docker-compose.yml -f /workspace/docker-compose.gpu.yml rm -f audex-30b-a3b audex-vllm
+sleep 30
 
 echo ""
 echo "=========================================="

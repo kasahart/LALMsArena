@@ -26,6 +26,7 @@ MODEL_ENDPOINTS: dict[str, str] = {
     "Audio-Omni":                     f"{_DEFAULT_BASE}:8616",  # ~24 GB
     "MOSS-Audio-4B":                  f"{_DEFAULT_BASE}:8603",  # ~11 GB
     "Qwen2-Audio":                    f"{_DEFAULT_BASE}:8600",  # ~16 GB
+    "Gemma-4-12B":                    f"{_DEFAULT_BASE}:8617",  # ~32 GB
     "Gemma-4-E4B":                    f"{_DEFAULT_BASE}:8602",  # ~16 GB
     "Audio Flamingo Next":            f"{_DEFAULT_BASE}:8601",  # ~16 GB
     "Audio Flamingo Next Captioner":  f"{_DEFAULT_BASE}:8607",  # ~16 GB
@@ -35,6 +36,7 @@ MODEL_ENDPOINTS: dict[str, str] = {
     "MiMo-Audio-7B":                  f"{_DEFAULT_BASE}:8613",  # ~18 GB
     "MiMo-Audio-7B-Thinking":         f"{_DEFAULT_BASE}:8614",  # ~18 GB
     "SALMONN-13B":                    f"{_DEFAULT_BASE}:8605",  # ~26 GB
+    "Nemotron-Labs-Audex-30B-A3B":    f"{_DEFAULT_BASE}:8618",  # ~61 GB
     "Qwen3-Omni-Captioner":           f"{_DEFAULT_BASE}:8611",  # ~61 GB
     "Qwen3-Omni-Thinking":            f"{_DEFAULT_BASE}:8612",  # ~61 GB
     "Nemotron-Nano-Omni-Reasoning":   f"{_DEFAULT_BASE}:8615",  # ~61 GB
@@ -48,6 +50,7 @@ MODEL_VRAM_GB: dict[str, int] = {
     "Audio Flamingo Next":            16,
     "Audio Flamingo Next Captioner":  16,
     "Audio Flamingo Next Think":      16,
+    "Gemma-4-12B":                    32,
     "Gemma-4-E4B":                    16,
     "Audio-Omni":                     24,
     "MOSS-Audio-4B":                  11,
@@ -60,6 +63,7 @@ MODEL_VRAM_GB: dict[str, int] = {
     "Qwen3-Omni":                     68,
     "Qwen3-Omni-Captioner":           61,
     "Qwen3-Omni-Thinking":            61,
+    "Nemotron-Labs-Audex-30B-A3B":    61,
     "Nemotron-Nano-Omni-Reasoning":   61,
 }
 
@@ -69,6 +73,7 @@ MODEL_HF_URLS: dict[str, str] = {
     "Audio Flamingo Next":           f"{_HF}/nvidia/audio-flamingo-next-hf",
     "Audio Flamingo Next Captioner": f"{_HF}/nvidia/audio-flamingo-next-captioner-hf",
     "Audio Flamingo Next Think":     f"{_HF}/nvidia/audio-flamingo-next-think-hf",
+    "Gemma-4-12B":                   f"{_HF}/google/gemma-4-12B",
     "Gemma-4-E4B":                   f"{_HF}/google/gemma-4-E4B-it",
     "MOSS-Audio-4B":                 f"{_HF}/OpenMOSS-Team/MOSS-Audio-4B-Instruct",
     "MOSS-Audio-8B":                 f"{_HF}/OpenMOSS-Team/MOSS-Audio-8B-Instruct",
@@ -80,6 +85,7 @@ MODEL_HF_URLS: dict[str, str] = {
     "Qwen3-Omni":                    f"{_HF}/Qwen/Qwen3-Omni-30B-A3B-Instruct",
     "Qwen3-Omni-Captioner":          f"{_HF}/Qwen/Qwen3-Omni-30B-A3B-Captioner",
     "Qwen3-Omni-Thinking":           f"{_HF}/Qwen/Qwen3-Omni-30B-A3B-Thinking",
+    "Nemotron-Labs-Audex-30B-A3B":   f"{_HF}/nvidia/Nemotron-Labs-Audex-30B-A3B",
     "Nemotron-Nano-Omni-Reasoning":  f"{_HF}/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16",
     "Audio-Omni":                    f"{_HF}/HKUSTAudio/Audio-Omni",
 }
